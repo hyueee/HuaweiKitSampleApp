@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddRoomActivity">
+
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".AddRoomActivity">
 
@@ -50,7 +51,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/roomName"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
             android:hint="Number of Player"
             app:errorEnabled="true"
             app:startIconDrawable="@drawable/ic_people">
@@ -70,7 +70,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/person"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
             android:hint="Language Preferred"
             app:errorEnabled="true"
             app:startIconDrawable="@drawable/ic_language">
@@ -83,17 +82,53 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/country"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/language"
+            android:layout_centerHorizontal="true"
+            android:hint="Game Server"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/ic_server">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/time"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/country"
+            android:layout_centerHorizontal="true"
+            android:hint="Frequent Playing Time"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/ic_time">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/description"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="Description"
-            android:textColorHint="@color/black"
+            android:layout_below="@+id/time"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/language"
+            android:hint="Description 1"
+            android:textColorHint="@color/black"
             app:startIconDrawable="@drawable/ic_settings">
 
             <AutoCompleteTextView
@@ -105,67 +140,79 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:hint="Description 2"
+            android:textColorHint="@color/black"
+            app:startIconDrawable="@drawable/ic_settings">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/description3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:hint="Description 3"
+            android:textColorHint="@color/black"
+            app:startIconDrawable="@drawable/ic_settings">
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/note"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:hint="Additional Note"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/ic_note">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="Add"
-            android:textSize="15sp"
-            android:layout_alignParentBottom="true"/>
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Preferences"
-            android:textColor="@color/black"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_below="@+id/description"
-            android:layout_centerHorizontal="true"/>
-
-        <CheckBox
-            android:id="@+id/checkBox1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView1"
-            android:layout_marginTop="5dp"
-            android:text="" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBox1"
-            android:layout_marginTop="0dp"
-            android:text="" />
-
-        <CheckBox
-            android:id="@+id/checkBox3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBox2"
-            android:layout_marginTop="0dp"
-            android:text="" />
-
-        <CheckBox
-            android:id="@+id/checkBox4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBox3"
-            android:layout_marginTop="0dp"
-            android:text="" />
-
-        <CheckBox
-            android:id="@+id/checkBox5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBox4"
-            android:layout_marginTop="0dp"
-            android:text="Need Some Boy Players!" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/note"/>
 
     </RelativeLayout>
+
 </androidx.core.widget.NestedScrollView>

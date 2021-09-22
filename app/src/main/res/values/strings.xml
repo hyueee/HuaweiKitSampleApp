@@ -13,6 +13,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="description">
+        <item>Building a good team for some wins!</item>
         <item>No Rank Limit Required.</item>
         <item>Playing Ranked Match. Need a Pro!</item>
         <item>Just for fun! Let's become Friends!</item>
@@ -20,11 +21,18 @@
         <item>Need Some Boy Players!</item>
         <item>Mayday! Mayday! My friend list is EMPTY!</item>
         <item>Forever Alone (or might not?)</item>
-        <item>You don't have friend, so just Join!</item>
+        <item>You don't have friend, so Come and Join us!</item>
         <item>Whatever.</item>
         <item>I will carry you.</item>
         <item>I need carry.</item>
         <item>Now or Never!</item>
+        <item>Gamer for life! Play everyday!</item>
+        <item>Morning Gamer!</item>
+        <item>Afternoon Gamer!</item>
+        <item>Night Gamer!</item>
+        <item>Midnight Gamer!</item>
+        <item>Weekend Gamer!</item>
+        <item>Weekdays Gamer!</item>
     </string-array>
 
 </resources>
