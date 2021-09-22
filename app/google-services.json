@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1088003790504",
+    "project_id": "cincaiplay-15bf6",
+    "storage_bucket": "cincaiplay-15bf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088003790504:android:72331bebae58839cb0149d",
+        "android_client_info": {
+          "package_name": "com.example.huaweikitsampleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088003790504-e6gqhf6ni3reu5dm4k8kj2dh2s8b8ob5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe4FCHvGsC-bCoca0DrCSH9NFpmjpWXbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088003790504-e6gqhf6ni3reu5dm4k8kj2dh2s8b8ob5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
