@@ -79,8 +79,8 @@ public class FirstFragment extends Fragment {
         SearchView searchView = (SearchView) itemSearch.getActionView();
         searchView.setQueryHint("Search name here");
 
-        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
-        searchIcon.setColorFilter(Color.BLACK);
+//        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+//        searchIcon.setColorFilter(Color.BLACK);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
