@@ -1,6 +1,5 @@
 package com.example.huaweikitsampleapp;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ public class ViewLobbyAdapter extends FirebaseRecyclerAdapter<LobbyModel, ViewLo
     @Override
     protected void onBindViewHolder(@NonNull ViewLobbyAdapter.myViewHolder holder, int position, @NonNull LobbyModel model) {
         
-
+        holder.emailText.setText(model.getId());
         
 
         
