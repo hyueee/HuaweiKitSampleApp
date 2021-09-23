@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SecondActivity extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     RecyclerView recyclerView;
     ViewGameAdapter adapter;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,20 @@ public class SecondActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            userId = getIntent().getStringExtra("userId");
+        } else {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+
         FirebaseRecyclerOptions<GameModel> options =
                 new FirebaseRecyclerOptions.Builder<GameModel>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("game"), GameModel.class)
                         .build();
 
-        adapter = new ViewGameAdapter(options);
+        adapter = new ViewGameAdapter(options, userId);
         recyclerView.setAdapter(adapter);
+
     }
 
     @Override

@@ -22,6 +22,7 @@
     </string-array>
 
     <string-array name="item2">
+        <item>-</item>
         <item>Mayday! Mayday! My friend list is EMPTY!</item>
         <item>Forever Alone (or might not\?)</item>
         <item>You don\'t have friend, so Come and Join us!</item>
@@ -32,6 +33,7 @@
     </string-array>
 
     <string-array name="item3">
+        <item>-</item>
         <item>Gamer for life! Play everyday!</item>
         <item>Morning Gamer!</item>
         <item>Afternoon Gamer!</item>

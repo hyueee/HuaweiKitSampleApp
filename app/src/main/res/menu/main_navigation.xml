@@ -14,9 +14,13 @@
         android:icon="@drawable/ic_chat"
         android:title="Chat" />
 
-
     <item
         android:id="@+id/ThirdFragment"
+        android:icon="@drawable/ic_room"
+        android:title="My Rooms" />
+
+    <item
+        android:id="@+id/FourthFragment"
         android:icon="@drawable/ic_settings"
         android:title="Settings" />
 

@@ -24,13 +24,13 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="New Room"
+            android:text="Room Details"
             android:textColor="@color/black"
             android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_centerHorizontal="true"/>
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name"
@@ -41,15 +41,17 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="15dp"
             android:hint="Room Name"
-            app:errorEnabled="true"
             app:startIconDrawable="@drawable/ic_room">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="textCapSentences"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,15 +63,17 @@
             android:layout_below="@+id/name"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="Number of Player"
-            app:errorEnabled="true"
+            android:layout_marginBottom="15dp"
+            android:hint="Current Number of Player"
             app:startIconDrawable="@drawable/ic_people">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="number"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,15 +85,17 @@
             android:layout_below="@+id/numPlayer"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="Language Preferred (ex. EN, CN,...)"
-            app:errorEnabled="true"
+            android:hint="Language Preferred"
+            android:layout_marginBottom="15dp"
             app:startIconDrawable="@drawable/ic_language">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="textCapSentences"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,15 +107,17 @@
             android:layout_below="@+id/language"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="Game Server Played (ex. SEA, EUROPE,..)"
-            app:errorEnabled="true"
+            android:hint="Game Server Played"
+            android:layout_marginBottom="15dp"
             app:startIconDrawable="@drawable/ic_server">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="textCapSentences"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,81 +129,18 @@
             android:layout_below="@+id/server"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="20dp"
-            android:hint="Frequent Playing Day / Time (XX:XX)"
-            app:errorEnabled="true"
+            android:hint="Frequent Playing Day / Time"
+            android:layout_marginBottom="15dp"
             app:startIconDrawable="@drawable/ic_time">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="textCapSentences"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/description"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/time"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="20dp"
-            android:hint="Description 1"
-            app:errorEnabled="true"
-            android:textColorHint="@color/black"
-            app:startIconDrawable="@drawable/ic_settings">
-
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/description2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/description"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="20dp"
-            android:hint="Description 2 (Optional)"
-            android:textColorHint="@color/black"
-            app:startIconDrawable="@drawable/ic_settings">
-
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/description3"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/description2"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="20dp"
-            android:hint="Description 3 (Optional)"
-            android:textColorHint="@color/black"
-            app:startIconDrawable="@drawable/ic_settings">
-
-            <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -203,9 +148,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/description3"
+            android:layout_below="@+id/time"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:hint="Additional Note"
             app:startIconDrawable="@drawable/ic_note">
@@ -214,30 +158,103 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
-                android:inputType="textCapSentences"
+                android:inputType="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/descTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/note"
-            android:layout_marginStart="30dp"
-            android:text="Require approval from room admin when join" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Description"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/descTitle"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="- Description"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/description2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/description"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="- Description"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/description3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="- Description"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_below="@+id/description2"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/ownRoom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/description3"
+            android:layout_marginTop="15dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="*This is your own room."
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="#ff0000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnJoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBox"
+            android:layout_below="@+id/description3"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:padding="5dp"
-            android:text="Add"
+            android:text="Join"
+            android:visibility="gone"
             android:textSize="18sp" />
 
-
+        <Button
+            android:id="@+id/btnRequestJoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:text="Request to Join"
+            android:visibility="gone"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

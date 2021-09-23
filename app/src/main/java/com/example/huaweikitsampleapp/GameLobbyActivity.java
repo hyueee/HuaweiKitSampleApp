@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class GameLobbyActivity extends AppCompatActivity {
@@ -23,38 +24,46 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
 
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.teal_200)));
+        String id = getIntent().getStringExtra("id");
+        String userId = getIntent().getStringExtra("userId");
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.purple_500)));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
-        loadFragment(new FirstFragment());
+        loadFragment(new FirstFragment(id, userId));
 
         bottomNavigationView.setSelectedItemId(R.id.FirstFragment);
 
-        bottomNavigationView.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment temp = null;
 
                 switch (item.getItemId()) {
 
                     case R.id.FirstFragment:
-                        temp = new FirstFragment();
+                        temp = new FirstFragment(id, userId);
                         break;
 
                     case R.id.SecondFragment :
-                        temp = new SecondFragment();
+                        temp = new SecondFragment(id, userId);
                         break;
 
                     case R.id.ThirdFragment :
-                        temp = new ThirdFragment();
+                        temp = new ThirdFragment(id, userId);
+                        break;
+
+                    case R.id.FourthFragment :
+                        temp = new FourthFragment(id, userId);
                         break;
 
                 }
                 loadFragment(temp);
+
+                return true;
             }
         });
-
     }
 
     private void loadFragment(Fragment fragment) {

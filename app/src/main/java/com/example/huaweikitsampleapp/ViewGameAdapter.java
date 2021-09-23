@@ -15,9 +15,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 public class ViewGameAdapter extends FirebaseRecyclerAdapter<GameModel, ViewGameAdapter.myViewHolder> {
+    String userId;
 
-    public ViewGameAdapter(FirebaseRecyclerOptions<GameModel> options) {
+    public ViewGameAdapter(FirebaseRecyclerOptions<GameModel> options, String userId) {
         super(options);
+        this.userId = userId;
     }
 
     @Override
@@ -57,6 +59,7 @@ public class ViewGameAdapter extends FirebaseRecyclerAdapter<GameModel, ViewGame
             public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), GameLobbyActivity.class);
                 myIntent.putExtra("id", model.getId());
+                myIntent.putExtra("userId", userId);
                 v.getContext().startActivity(myIntent);
             }
         });
