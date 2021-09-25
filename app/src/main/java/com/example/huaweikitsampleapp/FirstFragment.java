@@ -90,9 +90,8 @@ public class FirstFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
 
-        inflater.inflate(R.menu.bar_add_search, menu);
+        inflater.inflate(R.menu.bar_search, menu);
         MenuItem itemSearch = menu.findItem(R.id.search);
-        MenuItem itemAdd = menu.findItem(R.id.add);
         SearchView searchView = (SearchView) itemSearch.getActionView();
         searchView.setQueryHint("Search room id here");
 
@@ -113,19 +112,6 @@ public class FirstFragment extends Fragment {
             }
 
         });
-
-        itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent myIntent = new Intent(getContext(), AddRoomActivity.class);
-                myIntent.putExtra("gameId", gameId);
-                myIntent.putExtra("userId", userId);
-                getContext().startActivity(myIntent);
-
-                return false;
-            }
-        });
-
     }
 
     private void textSearch(String str) {

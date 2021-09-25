@@ -14,16 +14,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
-import androidx.appcompat.widget.SearchView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class ThirdFragment extends Fragment {
     RecyclerView recyclerView;
     ViewOwnRoomsAdapter adapter;
     String gameId, userId, gameName;
+    FloatingActionButton fabMain, fab1, fab2;
+    boolean clickFab = true;
+    Animation animation1, animation2, animation3, animation4;
 
     public ThirdFragment(String id, String userId) {
         this.gameId = id;
@@ -57,18 +63,90 @@ public class ThirdFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        animation1 = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_open_anim);
+        animation2 = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_close_anim);
+        animation3 = AnimationUtils.loadAnimation(getContext(), R.anim.open_anim);
+        animation4 = AnimationUtils.loadAnimation(getContext(), R.anim.close_anim);
+
+        fabMain = view.findViewById(R.id.fabMain);
+        fab1 = view.findViewById(R.id.fab1);
+        fab2 = view.findViewById(R.id.fab2);
+
+        fabMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabVisibility(clickFab);
+                fabAnimation(clickFab);
+                fabClickable(clickFab);
+                clickFab = !clickFab;
+            }
+        });
+
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(v.getContext(), JoinRoomApprovalActivity.class);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("gameId", gameId);
+                v.getContext().startActivity(myIntent);
+
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(v.getContext(), JoinRoomRequestActivity.class);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("gameId", gameId);
+                v.getContext().startActivity(myIntent);
+            }
+        });
+
         recyclerView = view.findViewById(R.id.ThirdRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         FirebaseRecyclerOptions<RoomModel> options =
                 new FirebaseRecyclerOptions.Builder<RoomModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").orderByChild("createDate"), RoomModel.class)
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).orderByChild("createDate"), RoomModel.class)
                         .build();
 
         adapter = new ViewOwnRoomsAdapter(options, gameId, userId);
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    private void fabClickable(boolean clickFab) {
+        if (!clickFab) {
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+        } else {
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+        }
+    }
+
+    private void fabVisibility(boolean clickFab) {
+        if (!clickFab) {
+            fab1.setVisibility(View.VISIBLE);
+            fab2.setVisibility(View.VISIBLE);
+        } else {
+            fab1.setVisibility(View.INVISIBLE);
+            fab2.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void fabAnimation(boolean clickFab) {
+        if (!clickFab) {
+            fabMain.startAnimation(animation2);
+            fab1.startAnimation(animation3);
+            fab2.startAnimation(animation3);
+        } else {
+            fabMain.startAnimation(animation1);
+            fab1.startAnimation(animation4);
+            fab2.startAnimation(animation4);
+        }
     }
 
     @Override
@@ -88,6 +166,21 @@ public class ThirdFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
+
+        inflater.inflate(R.menu.bar_add, menu);
+        MenuItem itemAdd = menu.findItem(R.id.add);
+
+        itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent myIntent = new Intent(getContext(), AddRoomActivity.class);
+                myIntent.putExtra("gameId", gameId);
+                myIntent.putExtra("userId", userId);
+                getContext().startActivity(myIntent);
+
+                return false;
+            }
+        });
 
     }
 

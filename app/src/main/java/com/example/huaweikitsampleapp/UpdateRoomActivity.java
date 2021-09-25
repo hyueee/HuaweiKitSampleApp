@@ -34,19 +34,20 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class AddRoomActivity extends AppCompatActivity {
+public class UpdateRoomActivity extends AppCompatActivity {
+    DatabaseReference myRef;
     AutoCompleteTextView autoCompleteTextView1, autoCompleteTextView2, autoCompleteTextView3;
     ImageView btnBack;
     Button btnAdd;
     CheckBox checkBox;
     TextInputLayout name, numPlayer, language, server, time, note;
-    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_room);
 
+        String roomId = getIntent().getStringExtra("roomId");
         String gameId = getIntent().getStringExtra("gameId");
         String userId = getIntent().getStringExtra("userId");
 
@@ -63,6 +64,8 @@ public class AddRoomActivity extends AppCompatActivity {
         time = findViewById(R.id.time);
         note = findViewById(R.id.note);
 
+        btnAdd.setText("Update");
+
         Resources res = getResources();
         String[] description1 = res.getStringArray(R.array.item1);
         ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter<String>(this, R.layout.dropdown_text, description1);
@@ -71,26 +74,49 @@ public class AddRoomActivity extends AppCompatActivity {
         String[] description3 = res.getStringArray(R.array.item3);
         ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(this, R.layout.dropdown_text, description3);
 
-        autoCompleteTextView1.setText(arrayAdapter1.getItem(0), false);
-        autoCompleteTextView1.setAdapter(arrayAdapter1);
-        autoCompleteTextView2.setText(arrayAdapter2.getItem(0), false);
-        autoCompleteTextView2.setAdapter(arrayAdapter2);
-        autoCompleteTextView3.setText(arrayAdapter3.getItem(0), false);
-        autoCompleteTextView3.setAdapter(arrayAdapter3);
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        myRef = FirebaseDatabase.getInstance().getReference().child("room").child(gameId).child(roomId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String roomName = snapshot.child("name").getValue().toString();
+                    name.getEditText().setText(roomName);
+                    String roomPlayer = snapshot.child("numPlayer").getValue().toString();
+                    numPlayer.getEditText().setText(roomPlayer);
+                    String roomLanguage = snapshot.child("language").getValue().toString();
+                    language.getEditText().setText(roomLanguage);
+                    String roomServer = snapshot.child("server").getValue().toString();
+                    server.getEditText().setText(roomServer);
+                    String roomTime = snapshot.child("time").getValue().toString();
+                    time.getEditText().setText(roomTime);
+                    String roomNote = snapshot.child("note").getValue().toString();
+                    note.getEditText().setText(roomNote);
+
+                    String[] description = snapshot.child("description").getValue().toString().split(" , ");
+
+                    autoCompleteTextView1.setText(description[0], false);
+                    autoCompleteTextView1.setAdapter(arrayAdapter1);
+                    autoCompleteTextView2.setText(description[1], false);
+                    autoCompleteTextView2.setAdapter(arrayAdapter2);
+                    autoCompleteTextView3.setText(description[2], false);
+                    autoCompleteTextView3.setAdapter(arrayAdapter3);
+
+                    myRef.removeEventListener(this);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(AddRoomActivity.this)
+                new AlertDialog.Builder(UpdateRoomActivity.this)
                         .setIcon(R.drawable.ic_warning)
-                        .setTitle("New Room")
+                        .setTitle("Update Room")
                         .setCancelable(false)
                         .setMessage("Please ensure your details are correct.")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -167,9 +193,8 @@ public class AddRoomActivity extends AppCompatActivity {
                                 if (!TextUtils.isEmpty(roomName) && !TextUtils.isEmpty(roomPlayer) && !TextUtils.isEmpty(roomLanguage) && !TextUtils.isEmpty(roomServer) && !TextUtils.isEmpty(roomTime) && !TextUtils.isEmpty(description)) {
                                     if (checkBox.isChecked()) {
                                         newRoom.put("name", roomName);
-                                        newRoom.put("id", "none");
+                                        newRoom.put("id", roomId);
                                         newRoom.put("numPlayer", roomPlayer);
-                                        newRoom.put("currentPlayer", "1");
                                         newRoom.put("language", roomLanguage);
                                         newRoom.put("server", roomServer);
                                         newRoom.put("time", roomTime);
@@ -177,12 +202,10 @@ public class AddRoomActivity extends AppCompatActivity {
                                         newRoom.put("note", roomNote);
                                         newRoom.put("requestToJoin", "Yes");
                                         newRoom.put("description", description);
-                                        newRoom.put("owner", userId);
                                     } else {
                                         newRoom.put("name", roomName);
-                                        newRoom.put("id", "none");
+                                        newRoom.put("id", roomId);
                                         newRoom.put("numPlayer", roomPlayer);
-                                        newRoom.put("currentPlayer", "1");
                                         newRoom.put("language", roomLanguage);
                                         newRoom.put("server", roomServer);
                                         newRoom.put("time", roomTime);
@@ -190,17 +213,16 @@ public class AddRoomActivity extends AppCompatActivity {
                                         newRoom.put("note", roomNote);
                                         newRoom.put("requestToJoin", "No");
                                         newRoom.put("description", description);
-                                        newRoom.put("owner", userId);
                                     }
 
-                                    Map<String, Object> joinedRoom = new HashMap<>();
-                                    joinedRoom.put("name", roomName);
-                                    joinedRoom.put("server", roomServer);
-                                    joinedRoom.put("language", roomLanguage);
-                                    joinedRoom.put("time", roomTime);
-                                    joinedRoom.put("id", "None");
+                                    Map<String, Object> updateChatRoom = new HashMap<>();
+                                    updateChatRoom.put("name", roomName);
+                                    updateChatRoom.put("server", roomServer);
+                                    updateChatRoom.put("language", roomLanguage);
+                                    updateChatRoom.put("time", roomTime);
+                                    updateChatRoom.put("id", roomId);
 
-                                    addNewRoom(newRoom, gameId, userId, joinedRoom);
+                                    updateRoom(newRoom, gameId, userId, roomId, updateChatRoom);
                                 }
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -211,91 +233,37 @@ public class AddRoomActivity extends AppCompatActivity {
                 }).show();
             }
         });
-
     }
 
-    private void addNewRoom(Map<String, Object> newRoom, String gameId, String userId, Map<String, Object> joinedRoom) {
-        String id = getAlphaNumericString(5);
-
-        newRoom.replace("id", id);
-        joinedRoom.replace("id", id);
-
-        Map<String, Object> user = new HashMap<>();
-        user.put("1", userId);
-
-        myRef = FirebaseDatabase.getInstance().getReference().child("room").child(gameId).child(id);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void updateRoom(Map<String, Object> newRoom, String gameId, String userId, String roomId, Map<String, Object> updateChatRoom) {
+        FirebaseDatabase.getInstance().getReference().child("room").child(gameId).child(roomId)
+                .updateChildren(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    addNewRoom(newRoom, gameId, userId, joinedRoom);
-                } else {
-                    FirebaseDatabase.getInstance().getReference().child("room").child(gameId).child(id)
-                            .setValue(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(id).child("joinedUser")
-                                    .setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).child(id)
-                                            .setValue(joinedRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).child(id)
-                                                    .setValue(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    new AlertDialog.Builder(AddRoomActivity.this)
-                                                            .setIcon(R.drawable.ic_check)
-                                                            .setTitle("Thank you.")
-                                                            .setMessage("You have successfully created new room.")
-                                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    dialog.dismiss();
-                                                                    finish();
-                                                                }
-                                                            }).show();
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onSuccess(Void unused) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).child(roomId)
+                        .updateChildren(updateChatRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).child(roomId)
+                                .updateChildren(newRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                new AlertDialog.Builder(UpdateRoomActivity.this)
+                                        .setIcon(R.drawable.ic_check)
+                                        .setTitle("Thank you.")
+                                        .setMessage("You have successfully updated this room.")
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                finish();
+                                            }
+                                        }).show();
+                            }
+                        });
+                    }
+                });
             }
         });
-    }
-
-    // function to generate a random string of length n
-    static String getAlphaNumericString(int n)
-    {
-        // chose a Character random from this String
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
-
-        // create StringBuffer size of AlphaNumericString
-        StringBuilder sb = new StringBuilder(n);
-
-        for (int i = 0; i < n; i++) {
-
-            // generate a random number between
-            // 0 to AlphaNumericString variable length
-            int index = (int)(AlphaNumericString.length() * Math.random());
-
-            // add Character one by one in end of sb
-            sb.append(AlphaNumericString.charAt(index));
-        }
-
-        return sb.toString();
     }
 }
