@@ -2,7 +2,6 @@ package com.example.huaweikitsampleapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.SplittableRandom;
 import java.util.TimeZone;
 
 public class ViewRoomDetailsActivity extends AppCompatActivity {
@@ -218,7 +216,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId);
+                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("joinedUser");
                                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -253,6 +251,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                                                                                 new AlertDialog.Builder(ViewRoomDetailsActivity.this)
                                                                                         .setIcon(R.drawable.ic_check)
                                                                                         .setTitle("Thank you.")
+                                                                                        .setCancelable(false)
                                                                                         .setMessage("You have successfully joined this room.")
                                                                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                                                             @Override
@@ -297,109 +296,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("requestUser");
-                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Map<String, Object> user = new HashMap<>();
-
-                                        if (snapshot.exists()) {
-                                            int childNum = (int) snapshot.getChildrenCount();
-                                            childNum += 1;
-                                            user.put(Integer.toString(childNum), userId);
-                                        } else {
-                                            user.put("1", userId);
-                                        }
-
-                                        FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("requestUser")
-                                                .updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestNum");
-                                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        int number;
-                                                        if (snapshot.exists()) {
-                                                            String num = snapshot.getValue().toString();
-                                                            number = Integer.parseInt(num);
-                                                            number += 1;
-
-                                                            myRef.removeEventListener(this);
-                                                        } else {
-                                                            number = 1;
-                                                        }
-
-                                                        DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
-                                                        LocalDateTime now = LocalDateTime.now();
-                                                        String current = now.format(dtfDate);
-
-                                                        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa", Locale.getDefault());
-                                                        String current2 = dateFormat.format(new Date());
-
-                                                        long dateMillis = 0;
-
-                                                        //convert date to milliseconds
-                                                        try {
-                                                            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", Locale.getDefault());
-                                                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                                                            Date date = sdf.parse(current);
-                                                            dateMillis = date.getTime();
-                                                        } catch (ParseException e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                        String dateRequest = Long.toString(dateMillis);
-
-                                                        FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestNum").setValue(Integer.toString(number))
-                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                    @Override
-                                                                    public void onSuccess(Void unused) {
-                                                                        FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestJoinRoom").child(gameId).child(dateRequest)
-                                                                                .setValue(requestJoinRoomForOwner).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void unused) {
-                                                                                requestJoinRoom.replace("requestDate", current2);
-
-                                                                                FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId).child(roomId)
-                                                                                        .setValue(requestJoinRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                    @Override
-                                                                                    public void onSuccess(Void unused) {
-                                                                                        new AlertDialog.Builder(ViewRoomDetailsActivity.this)
-                                                                                                .setIcon(R.drawable.ic_check)
-                                                                                                .setTitle("Thank you.")
-                                                                                                .setMessage("You have successfully request to join this room. Please wait for approval from room admin.")
-                                                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                                                    @Override
-                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                        dialog.dismiss();
-                                                                                                        finish();
-                                                                                                    }
-                                                                                                }).show();
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-                                                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
+                                requestJoin(gameId, roomId, userId, requestJoinRoomForOwner, requestJoinRoom);
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -411,4 +308,100 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void requestJoin(String gameId, String roomId, String userId, Map<String, Object> requestJoinRoomForOwner, Map<String, Object> requestJoinRoom) {
+        myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("requestUser");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> user = new HashMap<>();
+                user.put(userId, "1");
+
+                FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("requestUser")
+                        .updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestNum");
+                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                int number;
+                                if (snapshot.exists()) {
+                                    String num = snapshot.getValue().toString();
+                                    number = Integer.parseInt(num);
+                                    number += 1;
+
+                                    myRef.removeEventListener(this);
+                                } else {
+                                    number = 1;
+                                }
+
+                                DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss");
+                                LocalDateTime now = LocalDateTime.now();
+                                String current = now.format(dtfDate);
+
+                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm aa", Locale.getDefault());
+                                String current2 = dateFormat.format(new Date());
+
+                                long dateMillis = 0;
+
+                                //convert date to milliseconds
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss", Locale.getDefault());
+                                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                                    Date date = sdf.parse(current);
+                                    dateMillis = date.getTime();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                String dateRequest = Long.toString(dateMillis);
+
+                                FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestNum").setValue(Integer.toString(number))
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                FirebaseDatabase.getInstance().getReference().child("Users").child(roomOwner).child("requestJoinRoom").child(gameId).child(dateRequest)
+                                                        .setValue(requestJoinRoomForOwner).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        requestJoinRoom.replace("requestDate", current2);
+
+                                                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId).child(roomId)
+                                                                .setValue(requestJoinRoom).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                new AlertDialog.Builder(ViewRoomDetailsActivity.this)
+                                                                        .setIcon(R.drawable.ic_check)
+                                                                        .setTitle("Thank you.")
+                                                                        .setMessage("You have successfully request to join this room. Please wait for approval from room admin.")
+                                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                dialog.dismiss();
+                                                                                finish();
+                                                                            }
+                                                                        }).show();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

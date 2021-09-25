@@ -42,8 +42,9 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     protected void onBindViewHolder(@NonNull ViewOwnRoomsAdapter.myViewHolder holder, int position, @NonNull RoomModel model) {
         holder.firstText.setText(model.getName());
         holder.scdText.setText(model.getCurrentPlayer() + "/" + model.getNumPlayer());
-        holder.thirdText.setText("Game Server : " + model.getServer());
-        holder.fourthText.setText("Available Playing Day / Time : " + model.getTime());
+        holder.thirdText.setText("Room ID : " + model.getId());
+        holder.fourthText.setText("Game Server : " + model.getServer());
+        holder.fifthText.setText("Available Playing Day / Time : " + model.getTime());
 
         holder.updateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +118,7 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
                                                                             @Override
                                                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                                                 int num = Integer.parseInt(snapshot.getValue().toString());
-                                                                                num -= 1;
+                                                                                num = num - childNum;
 
                                                                                 myRef.removeEventListener(this);
 
@@ -219,7 +220,7 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder{
-        TextView firstText, scdText, thirdText, fourthText, updateText, deleteText;
+        TextView firstText, scdText, thirdText, fourthText, fifthText, updateText, deleteText;
         CardView cardView;
 
         public myViewHolder(@NonNull  View itemView) {
@@ -229,6 +230,7 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
             scdText = itemView.findViewById(R.id.scdtext);
             thirdText = itemView.findViewById(R.id.thirdtext);
             fourthText = itemView.findViewById(R.id.fourthtext);
+            fifthText = itemView.findViewById(R.id.fifthtext);
             cardView = itemView.findViewById(R.id.cardView);
             updateText = itemView.findViewById(R.id.updatetext);
             deleteText = itemView.findViewById(R.id.deletetext);

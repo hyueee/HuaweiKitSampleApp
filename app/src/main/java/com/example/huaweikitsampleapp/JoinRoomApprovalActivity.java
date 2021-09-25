@@ -37,7 +37,7 @@ public class JoinRoomApprovalActivity extends AppCompatActivity {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId), RoomModel.class)
                         .build();
 
-        adapter = new ViewApprovalAdapter(options);
+        adapter = new ViewApprovalAdapter(options, userId, gameId);
         recyclerView.setAdapter(adapter);
 
     }

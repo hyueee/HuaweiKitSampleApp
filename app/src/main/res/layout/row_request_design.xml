@@ -7,6 +7,7 @@
     app:cardCornerRadius="10dp"
     android:elevation="8dp"
     app:cardUseCompatPadding="true"
+    android:clickable="false"
     android:id="@+id/cardView">
 
     <RelativeLayout
@@ -16,7 +17,7 @@
 
         <TextView
             android:id="@+id/firsttext"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:fontFamily="sans-serif-condensed-medium"
@@ -27,78 +28,48 @@
 
         <TextView
             android:id="@+id/scdtext"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/firsttext"
+            android:layout_below="@id/firsttext"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="9dp"
             android:fontFamily="sans-serif-condensed-medium"
-            android:gravity="center_horizontal"
-            android:text="10/10"
+            android:text="This is another text"
             android:textColor="#000"
-            android:textSize="20sp" />
-
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/thirdtext"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/firsttext"
+            android:layout_below="@id/scdtext"
             android:layout_marginStart="3dp"
-            android:ellipsize="end"
             android:fontFamily="sans-serif-condensed-medium"
-            android:maxLines="1"
             android:text="This is another text"
             android:textColor="#000"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/fourthtext"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/thirdtext"
-            android:layout_marginStart="3dp"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:maxLines="1"
-            android:text="This is another text"
-            android:textColor="#000"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/fifthtext"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fourthtext"
-            android:layout_marginStart="3dp"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:maxLines="1"
-            android:text="This is another text"
-            android:textColor="#000"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/updatetext"
+            android:id="@+id/accepttext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/scdtext"
-            android:layout_toEndOf="@+id/thirdtext"
-            android:layout_marginTop="3dp"
+            android:layout_below="@+id/firsttext"
+            android:layout_toEndOf="@+id/scdtext"
             android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center"
-            android:text="Update"
-            android:textColor="#FFA500"
+            android:text="Accept"
+            android:textColor="#00A300"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/deletetext"
+            android:id="@+id/rejecttext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/updatetext"
-            android:layout_toEndOf="@+id/fourthtext"
-            android:layout_marginTop="10dp"
+            android:layout_below="@id/accepttext"
+            android:layout_toEndOf="@+id/thirdtext"
             android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center"
-            android:text="Delete"
+            android:text="Reject"
             android:textColor="#ff0000"
             android:textSize="18sp" />
 
