@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -13,9 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class ViewGameAdapter extends FirebaseRecyclerAdapter<GameModel, ViewGameAdapter.myViewHolder> {
     String userId;
+    DatabaseReference myRef;
 
     public ViewGameAdapter(FirebaseRecyclerOptions<GameModel> options, String userId) {
         super(options);
@@ -57,8 +66,32 @@ public class ViewGameAdapter extends FirebaseRecyclerAdapter<GameModel, ViewGame
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(model.getId());
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot ss : snapshot.getChildren()) {
+                                FirebaseMessaging.getInstance().subscribeToTopic(ss.child("id").getValue().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+
+                                    }
+                                });
+                            }
+                        }
+                        myRef.removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 Intent myIntent = new Intent(v.getContext(), GameLobbyActivity.class);
-                myIntent.putExtra("id", model.getId());
+                myIntent.putExtra("frag", "first");
+                myIntent.putExtra("gameId", model.getId());
                 myIntent.putExtra("userId", userId);
                 v.getContext().startActivity(myIntent);
             }

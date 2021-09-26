@@ -31,6 +31,7 @@ public class ViewChatRoomAdapter extends FirebaseRecyclerAdapter<RoomModel, View
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NotificationModel.room_selected = model.getId();
                 Intent myIntent = new Intent(v.getContext(), ChatActivity.class);
                 myIntent.putExtra("roomId", model.getId());
                 myIntent.putExtra("roomName", model.getName());

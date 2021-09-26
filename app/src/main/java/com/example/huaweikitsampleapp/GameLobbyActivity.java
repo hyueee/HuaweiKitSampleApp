@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.FirebaseAuth;
 
 
 public class GameLobbyActivity extends AppCompatActivity {
@@ -24,16 +23,22 @@ public class GameLobbyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_lobby);
 
-        String id = getIntent().getStringExtra("id");
+        String gameId = getIntent().getStringExtra("gameId");
         String userId = getIntent().getStringExtra("userId");
+        String frag = getIntent().getStringExtra("frag");
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.purple_500)));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
-        loadFragment(new FirstFragment(id, userId));
+        if (frag.equals("second")) {
+            loadFragment(new SecondFragment(gameId, userId));
+            bottomNavigationView.setSelectedItemId(R.id.SecondFragment);
+        } else {
+            loadFragment(new FirstFragment(gameId, userId));
+            bottomNavigationView.setSelectedItemId(R.id.FirstFragment);
+        }
 
-        bottomNavigationView.setSelectedItemId(R.id.FirstFragment);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -43,19 +48,19 @@ public class GameLobbyActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.FirstFragment:
-                        temp = new FirstFragment(id, userId);
+                        temp = new FirstFragment(gameId, userId);
                         break;
 
                     case R.id.SecondFragment :
-                        temp = new SecondFragment(id, userId);
+                        temp = new SecondFragment(gameId, userId);
                         break;
 
                     case R.id.ThirdFragment :
-                        temp = new ThirdFragment(id, userId);
+                        temp = new ThirdFragment(gameId, userId);
                         break;
 
                     case R.id.FourthFragment :
-                        temp = new FourthFragment(id, userId);
+                        temp = new FourthFragment(gameId, userId);
                         break;
 
                 }
@@ -64,6 +69,7 @@ public class GameLobbyActivity extends AppCompatActivity {
                 return true;
             }
         });
+
     }
 
     private void loadFragment(Fragment fragment) {
@@ -77,5 +83,7 @@ public class GameLobbyActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main_navigation, menu);
         return true;
     }
+
+
 
 }

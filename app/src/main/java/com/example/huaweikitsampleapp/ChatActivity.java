@@ -1,10 +1,8 @@
 package com.example.huaweikitsampleapp;
 
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,20 +44,39 @@ public class ChatActivity extends AppCompatActivity {
     ImageView btnBack, btnSend;
     EditText message;
     DatabaseReference myRef;
-//    ICFMService icfmService;
+    ICFMService icfmService;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
+    String gameName, gameId, userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-//        icfmService = RetrofitFCMClient.getInstance().create(ICFMService.class);
+        icfmService = RetrofitFCMClient.getInstance().create(ICFMService.class);
 
-        String userId = getIntent().getStringExtra("userId");
-        String gameId = getIntent().getStringExtra("gameId");
+        userId = getIntent().getStringExtra("userId");
+        gameId = getIntent().getStringExtra("gameId");
         String roomId = getIntent().getStringExtra("roomId");
         String roomName = getIntent().getStringExtra("roomName");
+
+        if (gameId.equals("csgo")) {
+            gameName = "Counter-Strike: Global Offensive";
+        } else if (gameId.equals("valorant")) {
+            gameName = "Valorant";
+        } else if (gameId.equals("dbd")) {
+            gameName = "Dead by Daylight";
+        } else if (gameId.equals("l4d")) {
+            gameName = "Left 4 Dead";
+        } else if (gameId.equals("dragonest")) {
+            gameName = "Dragon Nest";
+        } else if (gameId.equals("genshin")) {
+            gameName = "Genshin Impact";
+        } else if (gameId.equals("gta5")) {
+            gameName = "Grand Theft Auto V";
+        } else if (gameId.equals("maple")) {
+            gameName = "Maple Story";
+        }
 
         roomTitle = findViewById(R.id.chatUser);
         btnBack = findViewById(R.id.btnBack);
@@ -68,6 +85,18 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         roomTitle.setText("Room " + roomName);
+
+        roomTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getApplicationContext(), ViewRoomActivity.class);
+                myIntent.putExtra("roomId", roomId);
+                myIntent.putExtra("roomName", roomName);
+                myIntent.putExtra("gameId", gameId);
+                myIntent.putExtra("userId", userId);
+                startActivity(myIntent);
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
@@ -180,33 +209,33 @@ public class ChatActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     message.setText(null);
-//                                                    Map<String, String> notiData = new HashMap<>();
-//                                                    notiData.put(NotificationModel.NOTI_ID, id);
-//                                                    notiData.put(NotificationModel.NOTI_TITLE, "Message from " + courseName);
-//                                                    notiData.put(NotificationModel.NOTI_CONTENT, arrayList.get(0).getUserName() + ": [image]");
-//                                                    notiData.put(NotificationModel.NOTI_SENDER, arrayList.get(0).getSender());
-//                                                    notiData.put(NotificationModel.NOTI_COURSE, courseSec);
-//                                                    notiData.put(NotificationModel.NOTI_COURSE_NAME, courseName);
-//
-//                                                    FCMSendData fcmSendData = new FCMSendData("/topics/"+ courseSec, notiData);
-//
-//                                                    compositeDisposable.add(
-//                                                            icfmService.sendNotification(fcmSendData)
-//                                                                    .subscribeOn(Schedulers.newThread())
-//                                                                    .observeOn(AndroidSchedulers.mainThread())
-//                                                                    .subscribe(new Consumer<FCMResponse>() {
-//                                                                                   @Override
-//                                                                                   public void accept(FCMResponse fcmResponse) {
-//
-//                                                                                   }
-//                                                                               }, new Consumer<Throwable>() {
-//                                                                                   @Override
-//                                                                                   public void accept(Throwable throwable) {
-//                                                                                       Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
-//                                                                                   }
-//                                                                               }
-//                                                                    )
-//                                                    );
+                                                    Map<String, String> notiData = new HashMap<>();
+                                                    notiData.put(NotificationModel.NOTI_SPECIAL_ID, roomId);
+                                                    notiData.put(NotificationModel.NOTI_TITLE, "Message from " + roomName + " - " + gameName);
+                                                    notiData.put(NotificationModel.NOTI_CONTENT, userName + ": " + text);
+                                                    notiData.put(NotificationModel.NOTI_SENDER, userId);
+                                                    notiData.put(NotificationModel.NOTI_GAME, gameId);
+                                                    notiData.put(NotificationModel.NOTI_ROOM_NAME, roomName);
+
+                                                    FCMSendData fcmSendData = new FCMSendData("/topics/"+ roomId, notiData);
+
+                                                    compositeDisposable.add(
+                                                            icfmService.sendNotification(fcmSendData)
+                                                                    .subscribeOn(Schedulers.newThread())
+                                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                                    .subscribe(new Consumer<FCMResponse>() {
+                                                                                   @Override
+                                                                                   public void accept(FCMResponse fcmResponse) {
+
+                                                                                   }
+                                                                               }, new Consumer<Throwable>() {
+                                                                                   @Override
+                                                                                   public void accept(Throwable throwable) {
+                                                                                       Toast.makeText(getApplicationContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                   }
+                                                                               }
+                                                                    )
+                                                    );
                                                 }
                                             });
 
@@ -242,6 +271,25 @@ public class ChatActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        NotificationModel.room_selected = "";
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent myIntent = new Intent(ChatActivity.this, GameLobbyActivity.class);
+        myIntent.putExtra("gameId", gameId);
+        myIntent.putExtra("userId", userId);
+        myIntent.putExtra("frag", "second");
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(myIntent);
+        finish();
     }
 
 }

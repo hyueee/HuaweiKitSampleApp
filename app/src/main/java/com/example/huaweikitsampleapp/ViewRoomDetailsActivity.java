@@ -291,7 +291,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                 new AlertDialog.Builder(ViewRoomDetailsActivity.this)
                         .setIcon(R.drawable.ic_warning)
                         .setTitle("Join Room")
-                        .setMessage("Are you confirm to join this room? \n(*Require approval from room admin)")
+                        .setMessage("Are you confirm to join this room? \n(*Require approval from room owner)")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
