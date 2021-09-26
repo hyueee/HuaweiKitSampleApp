@@ -31,6 +31,7 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     String userId, gameId;
     Task<Void> myTask;
     DatabaseReference myRef;
+    int childNum;
 
     public ViewOwnRoomsAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId) {
         super(options);
@@ -77,107 +78,118 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
                                         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                Map<String, Object> deleteRoom = new HashMap<>();
-                                                deleteRoom.put("status", "This room has been deleted.");
+                                                if (snapshot.exists()) {
+                                                    Map<String, Object> deleteRoom = new HashMap<>();
+                                                    deleteRoom.put("status", "This room has been deleted.");
 
-                                                int childNum = (int) snapshot.getChildrenCount();
-                                                int total = 0;
+                                                    childNum = (int) snapshot.getChildrenCount();
 
-                                                for (DataSnapshot ss : snapshot.getChildren()) {
-                                                    myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString()).child("approvalRoom").child(gameId).child(model.getId());
-                                                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (snapshot.exists()) {
-                                                                FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString()).child("approvalRoom").child(gameId).child(model.getId())
-                                                                        .updateChildren(deleteRoom);
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
-                                                            Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-
-                                                    total++;
-
-                                                    if (total == childNum) {
-                                                        myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId());
-                                                        myTask = myRef.removeValue();
-                                                        myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    for (DataSnapshot ss : snapshot.getChildren()) {
+                                                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString()).child("approvalRoom").child(gameId).child(model.getId());
+                                                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                                             @Override
-                                                            public void onSuccess(Void unused) {
-                                                                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).child(model.getId());
-                                                                myTask = myRef.removeValue();
-                                                                myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                    @Override
-                                                                    public void onSuccess(Void unused) {
-                                                                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestNum");
-                                                                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                            @Override
-                                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                                int num = Integer.parseInt(snapshot.getValue().toString());
-                                                                                num = num - childNum;
+                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                if (snapshot.exists()) {
+                                                                    FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString()).child("approvalRoom").child(gameId).child(model.getId())
+                                                                            .updateChildren(deleteRoom);
+                                                                }
+                                                            }
 
-                                                                                myRef.removeEventListener(this);
-
-                                                                                FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestNum").setValue(Integer.toString(num))
-                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                            @Override
-                                                                                            public void onSuccess(Void unused) {
-                                                                                                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).child(model.getId());
-                                                                                                myTask = myRef.removeValue();
-                                                                                                myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                    @Override
-                                                                                                    public void onSuccess(Void unused) {
-                                                                                                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestJoinRoom").child(gameId).orderByChild("id").equalTo(model.getId())
-                                                                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                                    @Override
-                                                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                                                                                        for (DataSnapshot ss :snapshot.getChildren()) {
-                                                                                                                            String key = ss.getKey();
-                                                                                                                            snapshot.getRef().removeValue();
-                                                                                                                        }
-
-                                                                                                                        new AlertDialog.Builder(v.getContext())
-                                                                                                                                .setIcon(R.drawable.ic_check)
-                                                                                                                                .setTitle("Delete Room Success")
-                                                                                                                                .setCancelable(false)
-                                                                                                                                .setMessage("You have deleted this room.")
-                                                                                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                                                                                    @Override
-                                                                                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                                                                                        dialog.dismiss();
-                                                                                                                                    }
-                                                                                                                                }).show();
-                                                                                                                    }
-
-                                                                                                                    @Override
-                                                                                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                                                                    }
-                                                                                                                });
-                                                                                                    }
-                                                                                                });
-                                                                                            }
-                                                                                        });
-                                                                            }
-
-                                                                            @Override
-                                                                            public void onCancelled(@NonNull DatabaseError error) {
-                                                                                Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        });
-
-                                                                    }
-                                                                });
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                                Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                                     }
                                                 }
-                                                myRef.removeEventListener(this);
+
+                                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId()).child("joinedUser");
+                                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        int numPlayer = (int) snapshot.getChildrenCount();
+                                                        int num = 0;
+
+                                                        for (DataSnapshot ss : snapshot.getChildren()) {
+                                                            myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString()).child("chatRoom").child(gameId).child(model.getId());
+                                                            myRef.removeValue();
+
+                                                            num++;
+
+                                                            if (num == numPlayer) {
+                                                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId());
+                                                                myTask = myRef.removeValue();
+                                                                myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+                                                                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).child(model.getId());
+                                                                        myTask = myRef.removeValue();
+                                                                        myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void unused) {
+                                                                                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestNum");
+                                                                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                        if (snapshot.exists()) {
+                                                                                            int num = Integer.parseInt(snapshot.getValue().toString());
+                                                                                            num = num - childNum;
+
+                                                                                            myRef.removeEventListener(this);
+
+                                                                                            FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestNum").setValue(Integer.toString(num));
+                                                                                        }
+
+                                                                                        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestJoinRoom").child(gameId).orderByChild("id").equalTo(model.getId())
+                                                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                    @Override
+                                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                                        if (snapshot.exists()) {
+                                                                                                            for (DataSnapshot ss :snapshot.getChildren()) {
+                                                                                                                String key = ss.getKey();
+                                                                                                                snapshot.getRef().removeValue();
+                                                                                                            }
+                                                                                                        }
+
+                                                                                                        new AlertDialog.Builder(v.getContext())
+                                                                                                                .setIcon(R.drawable.ic_check)
+                                                                                                                .setTitle("Delete Room Success")
+                                                                                                                .setCancelable(false)
+                                                                                                                .setMessage("You have deleted this room.")
+                                                                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                                                                    @Override
+                                                                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                                                                        dialog.dismiss();
+                                                                                                                    }
+                                                                                                                }).show();
+                                                                                                    }
+
+                                                                                                    @Override
+                                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                                    }
+                                                                                                });
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                                                        Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                    }
+                                                                                });
+
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                        Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
 
                                             }
 

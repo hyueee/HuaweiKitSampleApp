@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/purple_500"
+        android:clickable="false"
+        android:text="date"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date">
+
+        <LinearLayout
+            android:id="@+id/messageLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="5dp"
+            android:layout_alignParentStart="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat_receiver_design"
+                android:id="@+id/messageLayout2"
+                android:visibility="gone"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="4dp"
+                    android:text="user"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/showMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:padding="8dp"
+                    android:paddingStart="5dp"
+                    android:text="Hello"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/displayTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0"
+                android:layout_gravity="bottom"
+                android:text="14:00"
+                android:textStyle="italic"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

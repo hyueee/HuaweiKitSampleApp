@@ -24,16 +24,16 @@ public class ViewChatRoomAdapter extends FirebaseRecyclerAdapter<RoomModel, View
 
     @Override
     protected void onBindViewHolder(@NonNull ViewChatRoomAdapter.myViewHolder holder, int position, @NonNull RoomModel model) {
-        holder.firstText.setText(model.getName());
-        holder.scdText.setText(model.getCurrentPlayer() + "/" + model.getNumPlayer());
+        holder.firstText.setText("Room : " + model.getName());
         holder.thirdText.setText("Game Server : " + model.getServer());
         holder.fourthText.setText("Available Playing Day / Time : " + model.getTime());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), ViewRoomDetailsActivity.class);
-                myIntent.putExtra("id", model.getId());
+                Intent myIntent = new Intent(v.getContext(), ChatActivity.class);
+                myIntent.putExtra("roomId", model.getId());
+                myIntent.putExtra("roomName", model.getName());
                 myIntent.putExtra("gameId", gameId);
                 myIntent.putExtra("userId", userId);
                 v.getContext().startActivity(myIntent);
@@ -45,20 +45,19 @@ public class ViewChatRoomAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_lobby_design, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_chat_design, parent, false);
 
         return new myViewHolder(view);
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder{
-        TextView firstText, scdText, thirdText, fourthText;
+        TextView firstText, thirdText, fourthText;
         CardView cardView;
 
         public myViewHolder(@NonNull  View itemView) {
             super(itemView);
 
             firstText = itemView.findViewById(R.id.firsttext);
-            scdText = itemView.findViewById(R.id.scdtext);
             thirdText = itemView.findViewById(R.id.thirdtext);
             fourthText = itemView.findViewById(R.id.fourthtext);
             cardView = itemView.findViewById(R.id.cardView);

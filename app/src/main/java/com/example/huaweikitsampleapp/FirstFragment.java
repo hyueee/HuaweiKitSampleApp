@@ -1,5 +1,7 @@
 package com.example.huaweikitsampleapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,16 +16,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FirstFragment extends Fragment {
     RecyclerView recyclerView;
     ViewLobbyAdapter adapter;
     String gameId, userId, gameName;
+    DatabaseReference myRef;
 
     public FirstFragment(String id, String userId) {
         this.gameId = id;
@@ -57,6 +65,37 @@ public class FirstFragment extends Fragment {
         getActivity().setTitle("Game Lobby - " + gameName);
 
         setHasOptionsMenu(true);
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("requestNum");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    int num = Integer.parseInt(snapshot.getValue().toString());
+
+                    if (num > 0) {
+                        new AlertDialog.Builder(getContext())
+                                .setIcon(R.drawable.ic_warning)
+                                .setTitle("Join Room Request Found!")
+                                .setCancelable(false)
+                                .setMessage("Some players want to join your room, please check!")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
+
+                    myRef.removeEventListener(this);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         recyclerView = view.findViewById(R.id.FirstRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

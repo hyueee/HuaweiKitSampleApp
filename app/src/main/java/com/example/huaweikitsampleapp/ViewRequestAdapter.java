@@ -88,7 +88,7 @@ public class ViewRequestAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewR
                                                         @Override
                                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                             Map<String, Object> fullRoom = new HashMap<>();
-                                                            fullRoom.put("status", "This room is full.");
+                                                            fullRoom.put("status", "This room is full");
 
                                                             int childNum = (int) snapshot.getChildrenCount();
                                                             int total = 0;
@@ -233,7 +233,7 @@ public class ViewRequestAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewR
                                                                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                                                                 @Override
                                                                                                                                 public void onSuccess(Void unused) {
-                                                                                                                                    FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId()).child("requestUser").orderByChild("id").equalTo(model.getRequestUser())
+                                                                                                                                    FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId()).child("requestUser").child(model.getRequestUser())
                                                                                                                                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                                                                                 @Override
                                                                                                                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -429,34 +429,24 @@ public class ViewRequestAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewR
 
                                                                                 }
 
-                                                                                FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child("requestUser").orderByChild(model.getRequestUser()).equalTo("1")
-                                                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                            @Override
-                                                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                                                                snapshot.getRef().removeValue();
-                                                                                                        //TODO: DELETE request user
-
-                                                                                                new AlertDialog.Builder(v.getContext())
-                                                                                                        .setIcon(R.drawable.ic_check)
-                                                                                                        .setTitle("Reject Player Success")
-                                                                                                        .setCancelable(false)
-                                                                                                        .setMessage("You have rejected this player to your room.")
-                                                                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                                                            @Override
-                                                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                                                dialog.dismiss();
-                                                                                                            }
-                                                                                                        }).show();
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                                            }
-                                                                                        });
-
-
+                                                                                myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(model.getId()).child("requestUser").child(model.getRequestUser());
+                                                                                myTask = myRef.removeValue();
+                                                                                myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Void unused) {
+                                                                                        new AlertDialog.Builder(v.getContext())
+                                                                                                .setIcon(R.drawable.ic_check)
+                                                                                                .setTitle("Reject Player Success")
+                                                                                                .setCancelable(false)
+                                                                                                .setMessage("You have rejected this player to your room.")
+                                                                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                                                    @Override
+                                                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                                                        dialog.dismiss();
+                                                                                                    }
+                                                                                                }).show();
+                                                                                    }
+                                                                                });
 
                                                                             }
 

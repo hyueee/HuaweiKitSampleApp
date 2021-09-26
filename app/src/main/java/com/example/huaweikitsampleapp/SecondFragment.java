@@ -90,41 +90,8 @@ public class SecondFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
 
-        inflater.inflate(R.menu.bar_search, menu);
-        MenuItem itemSearch = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) itemSearch.getActionView();
-        searchView.setQueryHint("Search room id here");
-
-//        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
-//        searchIcon.setColorFilter(Color.BLACK);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                textSearch(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                textSearch(query);
-                return true;
-            }
-
-        });
     }
 
-    private void textSearch(String str) {
-        FirebaseRecyclerOptions<RoomModel> options =
-                new FirebaseRecyclerOptions.Builder<RoomModel>()
-                        .setQuery( FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).orderByChild("id").startAt(str).endAt(str + "\uf8ff"), RoomModel.class)
-                        .build();
-
-        adapter = new ViewChatRoomAdapter(options, gameId, userId);
-        adapter.startListening();
-        recyclerView.setAdapter(adapter);
-
-    }
 
 //    public static String toTitleCase(String text) {
 //        boolean whiteSpace = true;

@@ -28,8 +28,10 @@ public class JoinRoomRequestActivity extends AppCompatActivity {
         String gameId = getIntent().getStringExtra("gameId");
 
         recyclerView = findViewById(R.id.approvalRecycle);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseRecyclerOptions<RoomModel> options =
                 new FirebaseRecyclerOptions.Builder<RoomModel>()
@@ -58,6 +60,8 @@ public class JoinRoomRequestActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_navigation, menu);
+
+        menu.clear();
         return true;
     }
 

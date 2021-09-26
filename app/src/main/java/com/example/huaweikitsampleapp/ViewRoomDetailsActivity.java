@@ -103,6 +103,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                     requestJoinRoom.put("id", roomId);
                     requestJoinRoom.put("name", roomName);
                     requestJoinRoom.put("requestDate", "None");
+                    requestJoinRoom.put("requestMillis", "None");
                     requestJoinRoom.put("status", "Requesting");
 
                     name.getEditText().setText(roomName);
@@ -143,9 +144,8 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
 
                     if (Integer.parseInt(roomCurrentPlayer) == Integer.parseInt(roomNumPlayer)) {
                         roomFull.setVisibility(View.VISIBLE);
-                    }
 
-                    if (roomOwner.equals(userId)) {
+                    } else if (roomOwner.equals(userId)) {
                         ownRoom.setVisibility(View.VISIBLE);
 
                     } else {
@@ -314,7 +314,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Map<String, Object> user = new HashMap<>();
-                user.put(userId, "1");
+                user.put(userId, userId);
 
                 FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(roomId).child("requestUser")
                         .updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -365,6 +365,7 @@ public class ViewRoomDetailsActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Void unused) {
                                                         requestJoinRoom.replace("requestDate", current2);
+                                                        requestJoinRoom.replace("requestMillis", dateRequest);
 
                                                         FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId).child(roomId)
                                                                 .setValue(requestJoinRoom).addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -34,7 +34,7 @@ public class JoinRoomApprovalActivity extends AppCompatActivity {
 
         FirebaseRecyclerOptions<RoomModel> options =
                 new FirebaseRecyclerOptions.Builder<RoomModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId), RoomModel.class)
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId).orderByChild("requestMillis"), RoomModel.class)
                         .build();
 
         adapter = new ViewApprovalAdapter(options, userId, gameId);
@@ -59,6 +59,8 @@ public class JoinRoomApprovalActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_navigation, menu);
+
+        menu.clear();
         return true;
     }
 

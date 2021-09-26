@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String storeId = name.substring(name.length()-2) + id;
 
         Map<String, Object> newUser = new HashMap<>();
-        newUser.put("username", name);
+        newUser.put("username", name + " (HUAWEI user)");
         newUser.put("email", email);
 
         myRef = FirebaseDatabase.getInstance().getReference("Users").child(storeId);
