@@ -14,16 +14,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SecondFragment extends Fragment {
     RecyclerView recyclerView;
     ViewChatRoomAdapter adapter;
     String gameId, userId, gameName;
+    DatabaseReference myRef;
 
     public SecondFragment(String id, String userId) {
         this.gameId = id;
@@ -68,6 +76,29 @@ public class SecondFragment extends Fragment {
 
         adapter = new ViewChatRoomAdapter(options, gameId, userId);
         recyclerView.setAdapter(adapter);
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ss : snapshot.getChildren()) {
+                        FirebaseMessaging.getInstance().subscribeToTopic(ss.child("id").getValue().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+
+                            }
+                        });
+                    }
+                }
+                myRef.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         return view;
     }

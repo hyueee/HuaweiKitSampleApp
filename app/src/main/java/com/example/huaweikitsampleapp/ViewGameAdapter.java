@@ -66,29 +66,6 @@ public class ViewGameAdapter extends FirebaseRecyclerAdapter<GameModel, ViewGame
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(model.getId());
-                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            for (DataSnapshot ss : snapshot.getChildren()) {
-                                FirebaseMessaging.getInstance().subscribeToTopic(ss.child("id").getValue().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-
-                                    }
-                                });
-                            }
-                        }
-                        myRef.removeEventListener(this);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(v.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
                 Intent myIntent = new Intent(v.getContext(), GameLobbyActivity.class);
                 myIntent.putExtra("frag", "first");
                 myIntent.putExtra("gameId", model.getId());

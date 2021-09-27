@@ -61,5 +61,9 @@ dependencies {
     //kam part
     implementation 'com.google.firebase:firebase-auth:21.0.1'
 
-
+    //ys part
+    implementation 'com.huawei.hms:ads:3.4.47.302'
+    implementation 'com.huawei.hms:ads-lite:13.4.47.302'
+    implementation 'com.huawei.hms:ads-identifier:3.4.47.302'
+    implementation 'com.huawei.hms:ads-installreferrer:3.4.47.302'
 }

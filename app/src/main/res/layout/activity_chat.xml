@@ -53,6 +53,15 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp" />
 
+    <Button
+        android:id="@+id/kick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="You have been kicked. \n(Click to Leave)"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"

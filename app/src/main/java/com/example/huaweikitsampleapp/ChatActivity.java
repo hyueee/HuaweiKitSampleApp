@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,8 +48,10 @@ public class ChatActivity extends AppCompatActivity {
     EditText message;
     DatabaseReference myRef;
     ICFMService icfmService;
+    Button kick;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
     String gameName, gameId, userId;
+    Task<Void> myTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class ChatActivity extends AppCompatActivity {
             gameName = "Maple Story";
         }
 
+        kick = findViewById(R.id.kick);
         roomTitle = findViewById(R.id.chatUser);
         btnBack = findViewById(R.id.btnBack);
         btnSend = findViewById(R.id.btnSend);
@@ -85,6 +91,48 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
 
         roomTitle.setText("Room " + roomName);
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).child(roomId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("status").exists()) {
+                    recyclerView.setVisibility(View.GONE);
+                    btnSend.setEnabled(false);
+                    roomTitle.setEnabled(false);
+                    message.setEnabled(false);
+                    kick.setVisibility(View.VISIBLE);
+
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(roomId).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+                        }
+                    });
+
+                    kick.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).child(roomId);
+                            myTask = myRef.removeValue();
+                            myTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    finish();
+                                    Toast.makeText(getApplicationContext(), "You have left the room.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }
+                myRef.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         roomTitle.setOnClickListener(new View.OnClickListener() {
             @Override

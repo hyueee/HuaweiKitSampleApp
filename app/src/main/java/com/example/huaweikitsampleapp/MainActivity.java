@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("username", name + " (HUAWEI user)");
         newUser.put("email", email);
+        newUser.put("id", storeId);
 
         myRef = FirebaseDatabase.getInstance().getReference("Users").child(storeId);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
