@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +25,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.huawei.agconnect.appmessaging.AGConnectAppMessaging;
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hmf.tasks.Task;
+import com.huawei.hms.aaid.HmsInstanceId;
+import com.huawei.hms.aaid.entity.AAIDResult;
+import com.huawei.hms.ads.AdListener;
+import com.huawei.hms.ads.AdParam;
+import com.huawei.hms.ads.BannerAdSize;
+import com.huawei.hms.ads.HwAds;
+import com.huawei.hms.ads.banner.BannerView;
 import com.huawei.hms.common.ApiException;
 import com.huawei.hms.support.account.AccountAuthManager;
 import com.huawei.hms.support.account.request.AccountAuthParams;
@@ -84,6 +93,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
 
+        //banner ads
+        // Initialize the HUAWEI Ads SDK.
+        HwAds.init(this);
+
+        // Obtain BannerView based on the configuration in layout/ad_fragment.xml.
+
+        BannerView bottomBannerView = findViewById(R.id.hw_banner_view);
+        bottomBannerView.setAdId("testw6vs28auh3");
+        bottomBannerView.setBannerAdSize(BannerAdSize.BANNER_SIZE_SMART);
+        bottomBannerView.setBannerRefresh(30);
+        AdParam adParam = new AdParam.Builder().build();
+        bottomBannerView.loadAd(adParam);
+
+        bottomBannerView.setAdListener(adListener);
+
+//        // Call new BannerView(Context context) to create a BannerView class.
+//        BannerView topBannerView = new BannerView(this);
+//        topBannerView.setAdId("testw6vs28auh3");
+//        topBannerView.setBannerAdSize(BannerAdSize.BANNER_SIZE_SMART);
+//        topBannerView.loadAd(adParam);
+//
+//        RelativeLayout rootView = findViewById(R.id.root_view);
+//        rootView.addView(topBannerView);
+
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
             startActivity(intent);
@@ -97,6 +130,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+    private AdListener adListener = new AdListener() {
+        @Override
+        public void onAdLoaded() {
+            Toast.makeText(getApplicationContext(), "worked", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onAdFailed(int errorCode) {
+            Toast.makeText(getApplicationContext(), "failed " + errorCode, Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onAdOpened() {
+            Toast.makeText(getApplicationContext(), "opened", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onAdClicked() {
+            Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onAdLeave() {
+            Toast.makeText(getApplicationContext(), "leave", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onAdClosed() {
+            Toast.makeText(getApplicationContext(), "closed", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private void silentSignInByHwId() {
         // 1. Use AccountAuthParams to specify the user information to be obtained, including the user ID (OpenID and UnionID), email address, and profile (nickname and picture).
@@ -257,5 +317,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
     }
+
 
 }

@@ -11,6 +11,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.huawei.agconnect.appmessaging.AGConnectAppMessaging;
 
 public class SecondActivity extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -18,10 +19,17 @@ public class SecondActivity extends AppCompatActivity {
     ViewGameAdapter adapter;
     String userId;
 
+    AGConnectAppMessaging appMessaging = AGConnectAppMessaging.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+        appMessaging.trigger("custom_message");
+        appMessaging.setFetchMessageEnable(true);
+        appMessaging.setDisplayEnable(true);
+        appMessaging.setForceFetch();
 
         recyclerView = findViewById(R.id.gameRecycle);
         collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
@@ -52,6 +60,7 @@ public class SecondActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         adapter.startListening();
+
     }
 
 
