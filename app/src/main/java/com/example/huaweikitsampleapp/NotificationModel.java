@@ -69,114 +69,114 @@ public class NotificationModel {
             pendingIntent = PendingIntent.getActivity(context, NOTI_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         } else {
-            myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(id).child("joinedUser");
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot ss : snapshot.getChildren()) {
-                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString());
-                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String name = snapshot.child("username").getValue().toString();
-
-                                if (name.length() > 13) {
-                                    String check = name.substring(0, 13);
-                                    if (check.equals("(HUAWEI user)")) {
-                                        Intent resultIntent = new Intent(context, ChatActivity.class);
-                                        resultIntent.putExtra("roomId", id);
-                                        resultIntent.putExtra("roomName", roomName);
-                                        resultIntent.putExtra("gameId", gameId);
-                                        resultIntent.putExtra("userId", ss.getValue().toString());
-                                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                                        stackBuilder.addNextIntentWithParentStack(resultIntent);
-
-                                        pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                        builder.setContentIntent(pendingIntent);
-                                        Notification notification = builder.build();
-                                        if (!sender.equals(ss.getValue().toString()) && !NotificationModel.room_selected.equals(id)) {
-                                            notificationManager.notify(id, NOTI_ID, notification);
-                                        }
-                                    } else {
-                                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                                            Intent resultIntent = new Intent(context, ChatActivity.class);
-                                            resultIntent.putExtra("roomId", id);
-                                            resultIntent.putExtra("roomName", roomName);
-                                            resultIntent.putExtra("gameId", gameId);
-                                            resultIntent.putExtra("userId", userId);
-                                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                                            stackBuilder.addNextIntentWithParentStack(resultIntent);
-
-                                            pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                            builder.setContentIntent(pendingIntent);
-                                            Notification notification = builder.build();
-                                            if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
-                                                notificationManager.notify(id, NOTI_ID, notification);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                                        Intent resultIntent = new Intent(context, ChatActivity.class);
-                                        resultIntent.putExtra("roomId", id);
-                                        resultIntent.putExtra("roomName", roomName);
-                                        resultIntent.putExtra("gameId", gameId);
-                                        resultIntent.putExtra("userId", userId);
-                                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                                        stackBuilder.addNextIntentWithParentStack(resultIntent);
-
-                                        pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                        builder.setContentIntent(pendingIntent);
-                                        Notification notification = builder.build();
-                                        if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
-                                            notificationManager.notify(id, NOTI_ID, notification);
-                                        }
-                                    }
-                                }
-
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-//            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-//                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//            myRef = FirebaseDatabase.getInstance().getReference().child("roomUser").child(gameId).child(id).child("joinedUser");
+//            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    for (DataSnapshot ss : snapshot.getChildren()) {
+//                        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(ss.getValue().toString());
+//                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                String name = snapshot.child("username").getValue().toString();
 //
-//                Intent resultIntent = new Intent(context, ChatActivity.class);
-//                resultIntent.putExtra("roomId", id);
-//                resultIntent.putExtra("roomName", roomName);
-//                resultIntent.putExtra("gameId", gameId);
-//                resultIntent.putExtra("userId", userId);
-//                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//                stackBuilder.addNextIntentWithParentStack(resultIntent);
+//                                if (name.length() > 13) {
+//                                    String check = name.substring(0, 13);
+//                                    if (check.equals("(HUAWEI user)")) {
+//                                        Intent resultIntent = new Intent(context, ChatActivity.class);
+//                                        resultIntent.putExtra("roomId", id);
+//                                        resultIntent.putExtra("roomName", roomName);
+//                                        resultIntent.putExtra("gameId", gameId);
+//                                        resultIntent.putExtra("userId", ss.getValue().toString());
+//                                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//                                        stackBuilder.addNextIntentWithParentStack(resultIntent);
 //
-//                pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
+//                                        pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
 //
-//                builder.setContentIntent(pendingIntent);
-//                Notification notification = builder.build();
-//                if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
-//                    notificationManager.notify(id, NOTI_ID, notification);
+//                                        builder.setContentIntent(pendingIntent);
+//                                        Notification notification = builder.build();
+//                                        if (!sender.equals(ss.getValue().toString()) && !NotificationModel.room_selected.equals(id)) {
+//                                            notificationManager.notify(id, NOTI_ID, notification);
+//                                        }
+//                                    } else {
+//                                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//                                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//                                            Intent resultIntent = new Intent(context, ChatActivity.class);
+//                                            resultIntent.putExtra("roomId", id);
+//                                            resultIntent.putExtra("roomName", roomName);
+//                                            resultIntent.putExtra("gameId", gameId);
+//                                            resultIntent.putExtra("userId", userId);
+//                                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//                                            stackBuilder.addNextIntentWithParentStack(resultIntent);
+//
+//                                            pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                            builder.setContentIntent(pendingIntent);
+//                                            Notification notification = builder.build();
+//                                            if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
+//                                                notificationManager.notify(id, NOTI_ID, notification);
+//                                            }
+//                                        }
+//                                    }
+//                                } else {
+//                                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//                                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//                                        Intent resultIntent = new Intent(context, ChatActivity.class);
+//                                        resultIntent.putExtra("roomId", id);
+//                                        resultIntent.putExtra("roomName", roomName);
+//                                        resultIntent.putExtra("gameId", gameId);
+//                                        resultIntent.putExtra("userId", userId);
+//                                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//                                        stackBuilder.addNextIntentWithParentStack(resultIntent);
+//
+//                                        pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                        builder.setContentIntent(pendingIntent);
+//                                        Notification notification = builder.build();
+//                                        if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
+//                                            notificationManager.notify(id, NOTI_ID, notification);
+//                                        }
+//                                    }
+//                                }
+//
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+//                    }
 //                }
-//            }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                Intent resultIntent = new Intent(context, ChatActivity.class);
+                resultIntent.putExtra("roomId", id);
+                resultIntent.putExtra("roomName", roomName);
+                resultIntent.putExtra("gameId", gameId);
+                resultIntent.putExtra("userId", userId);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addNextIntentWithParentStack(resultIntent);
+
+                pendingIntent = stackBuilder.getPendingIntent(NOTI_ID, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                builder.setContentIntent(pendingIntent);
+                Notification notification = builder.build();
+                if (!sender.equals(userId) && !NotificationModel.room_selected.equals(id)) {
+                    notificationManager.notify(id, NOTI_ID, notification);
+                }
+            }
 
 
         }

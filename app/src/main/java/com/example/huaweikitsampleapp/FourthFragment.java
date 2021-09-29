@@ -3,6 +3,7 @@ package com.example.huaweikitsampleapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -10,8 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hmf.tasks.Task;
@@ -20,12 +27,15 @@ import com.huawei.hms.support.account.request.AccountAuthParams;
 import com.huawei.hms.support.account.service.AccountAuthService;
 
 public class FourthFragment extends Fragment {
-    String gameId;
+    String gameId, userId;
     Button btnSignOut;
     private AccountAuthService mAuthService;
     private AccountAuthParams mAuthParam;
+    DatabaseReference myRef;
+    TextView userText;
 
     public FourthFragment(String id, String userId) {
+        this.userId = userId;
         this.gameId = id;
     }
 
@@ -34,6 +44,22 @@ public class FourthFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_fourth, container, false);
+
+        userText = view.findViewById(R.id.username);
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String name = snapshot.child("username").getValue().toString();
+                userText.setText(name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         mAuthService = AccountAuthManager.getService(getActivity(), mAuthParam);
 
@@ -53,7 +79,11 @@ public class FourthFragment extends Fragment {
                     });
                 }
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 

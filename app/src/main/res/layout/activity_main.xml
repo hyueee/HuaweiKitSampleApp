@@ -121,12 +121,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <com.huawei.hms.ads.banner.BannerView
         android:id="@+id/hw_banner_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

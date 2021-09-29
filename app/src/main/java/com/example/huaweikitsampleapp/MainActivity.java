@@ -101,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         BannerView bottomBannerView = findViewById(R.id.hw_banner_view);
         bottomBannerView.setAdId("testw6vs28auh3");
-        bottomBannerView.setBannerAdSize(BannerAdSize.BANNER_SIZE_SMART);
+        bottomBannerView.setBannerAdSize(BannerAdSize.BANNER_SIZE_320_50);
         bottomBannerView.setBannerRefresh(30);
         AdParam adParam = new AdParam.Builder().build();
         bottomBannerView.loadAd(adParam);
-
-        bottomBannerView.setAdListener(adListener);
 
 //        // Call new BannerView(Context context) to create a BannerView class.
 //        BannerView topBannerView = new BannerView(this);
@@ -130,33 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
-    private AdListener adListener = new AdListener() {
-        @Override
-        public void onAdLoaded() {
-            Toast.makeText(getApplicationContext(), "worked", Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onAdFailed(int errorCode) {
-            Toast.makeText(getApplicationContext(), "failed " + errorCode, Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onAdOpened() {
-            Toast.makeText(getApplicationContext(), "opened", Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onAdClicked() {
-            Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onAdLeave() {
-            Toast.makeText(getApplicationContext(), "leave", Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onAdClosed() {
-            Toast.makeText(getApplicationContext(), "closed", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     private void silentSignInByHwId() {
         // 1. Use AccountAuthParams to specify the user information to be obtained, including the user ID (OpenID and UnionID), email address, and profile (nickname and picture).
@@ -306,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         finish();
                     }else{
                         user.sendEmailVerification();
-                        progressbar_main.setVisibility(View.INVISIBLE);
+                        progressbar_main.setVisibility(View.GONE);
                         Toast.makeText(MainActivity.this,"Please verify your account at your email first.",Toast.LENGTH_LONG).show();
                     }
 
