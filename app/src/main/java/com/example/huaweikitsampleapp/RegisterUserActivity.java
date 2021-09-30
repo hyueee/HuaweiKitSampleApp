@@ -101,7 +101,7 @@ public class RegisterUserActivity extends AppCompatActivity implements View.OnCl
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
                                         FirebaseAuth.getInstance().signOut();
-                                        Toast.makeText(RegisterUserActivity.this,"User has been registered successfully. Please login.",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUserActivity.this,"User has been registered successfully. Please verify your email first.",Toast.LENGTH_LONG).show();
                                         et_r_email.setText("");
                                         et_r_password.setText("");
                                         et_r_name.setText("");
