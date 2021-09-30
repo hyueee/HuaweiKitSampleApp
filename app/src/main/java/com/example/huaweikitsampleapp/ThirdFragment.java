@@ -27,7 +27,7 @@ public class ThirdFragment extends Fragment {
     RecyclerView recyclerView;
     ViewOwnRoomsAdapter adapter;
     String gameId, userId, gameName;
-    FloatingActionButton fabMain, fab1, fab2;
+    FloatingActionButton fabMain, fab1, fab2, fab3;
     boolean clickFab = true;
     Animation animation1, animation2, animation3, animation4;
 
@@ -71,6 +71,7 @@ public class ThirdFragment extends Fragment {
         fabMain = view.findViewById(R.id.fabMain);
         fab1 = view.findViewById(R.id.fab1);
         fab2 = view.findViewById(R.id.fab2);
+        fab3 = view.findViewById(R.id.fab3);
 
         fabMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,15 +86,25 @@ public class ThirdFragment extends Fragment {
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(v.getContext(), JoinRoomApprovalActivity.class);
-                myIntent.putExtra("userId", userId);
+                Intent myIntent = new Intent(getContext(), AddRoomActivity.class);
                 myIntent.putExtra("gameId", gameId);
+                myIntent.putExtra("userId", userId);
                 v.getContext().startActivity(myIntent);
-
             }
         });
 
         fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(v.getContext(), JoinRoomApprovalActivity.class);
+                myIntent.putExtra("userId", userId);
+                myIntent.putExtra("gameId", gameId);
+                v.getContext().startActivity(myIntent);
+            }
+        });
+
+
+        fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(v.getContext(), JoinRoomRequestActivity.class);
@@ -121,9 +132,11 @@ public class ThirdFragment extends Fragment {
         if (!clickFab) {
             fab1.setClickable(false);
             fab2.setClickable(false);
+            fab3.setClickable(false);
         } else {
             fab1.setClickable(true);
             fab2.setClickable(true);
+            fab3.setClickable(true);
         }
     }
 
@@ -131,9 +144,11 @@ public class ThirdFragment extends Fragment {
         if (!clickFab) {
             fab1.setVisibility(View.VISIBLE);
             fab2.setVisibility(View.VISIBLE);
+            fab3.setVisibility(View.VISIBLE);
         } else {
             fab1.setVisibility(View.INVISIBLE);
             fab2.setVisibility(View.INVISIBLE);
+            fab3.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -142,10 +157,12 @@ public class ThirdFragment extends Fragment {
             fabMain.startAnimation(animation2);
             fab1.startAnimation(animation3);
             fab2.startAnimation(animation3);
+            fab3.startAnimation(animation3);
         } else {
             fabMain.startAnimation(animation1);
             fab1.startAnimation(animation4);
             fab2.startAnimation(animation4);
+            fab3.startAnimation(animation4);
         }
     }
 
@@ -166,22 +183,6 @@ public class ThirdFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-
-        inflater.inflate(R.menu.bar_add, menu);
-        MenuItem itemAdd = menu.findItem(R.id.add);
-
-        itemAdd.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent myIntent = new Intent(getContext(), AddRoomActivity.class);
-                myIntent.putExtra("gameId", gameId);
-                myIntent.putExtra("userId", userId);
-                getContext().startActivity(myIntent);
-
-                return false;
-            }
-        });
-
     }
 
 }

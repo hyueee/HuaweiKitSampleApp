@@ -41,11 +41,7 @@ public class SecondActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            userId = getIntent().getStringExtra("userId");
-        } else {
-            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }
+        userId = getIntent().getStringExtra("userId");
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null && userId.isEmpty()) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

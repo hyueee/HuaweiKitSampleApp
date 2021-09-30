@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/HongY/.gradle/caches/transforms-3/3a8ed71bae6efc6aa64faaddeea039cf/transformed/core-1.5.0/res/layout/custom_dialog.xml" value="0.21784420289855072" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/chat_receiver_design.xml" value="0.2703125" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/chat_sender_design.xml" value="0.2703125" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/custom_dialog.xml" value="0.2703125" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/ic_approval.xml" value="0.2703125" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/ic_request.xml" value="0.2703125" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/drawable/ic_server.xml" value="0.2703125" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout-v26/activity_game_profile.xml" value="0.24728260869565216" />
@@ -17,6 +20,7 @@
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_join_room_approval.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_join_room_request.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_onboarding.xml" value="0.2" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_register_user.xml" value="0.264" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_second.xml" value="0.264" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activity_splash.xml" value="0.24547101449275363" />
@@ -25,10 +29,12 @@
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/activty_game_profile.xml" value="0.24728260869565216" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_chat_receiver.xml" value="0.24954710144927536" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_chat_sender.xml" value="0.24954710144927536" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_dialog.xml" value="0.21784420289855072" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_game_row_design.xml" value="0.4" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_game_view_design.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_receiver_design.xml" value="0.24954710144927536" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_slider_item.xml" value="0.2427536231884058" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/custom_view_pager_slider.xml" value="0.21784420289855072" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/dropdown_text.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/fragment_first.xml" value="0.2427536231884058" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/fragment_fourth.xml" value="0.21920289855072464" />
@@ -42,6 +48,7 @@
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/row_request_design.xml" value="0.2536231884057971" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/row_room_owner_design.xml" value="0.24954710144927536" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/layout/row_room_user_design.xml" value="0.24954710144927536" />
+        <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/menu/bar_add.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/menu/bar_add_search.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/menu/bar_add_searcj.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/HongY/AndroidStudioProjects/HuaweiKitSampleApp/app/src/main/res/menu/bar_search.xml" value="0.25416666666666665" />

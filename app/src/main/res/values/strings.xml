@@ -43,4 +43,19 @@
         <item>Weekdays Gamer!</item>
     </string-array>
 
+    <string name="heading_one">Designed For Gamers</string>
+    <string name="desc_one">An unofficial application that gather all gamers to find their playmates around the world in different games.</string>
+    <string name="heading_two">Choose Your Favourite Game</string>
+    <string name="desc_two">We provide various latest popular games for you. More games upcoming!</string>
+    <string name="heading_three">Don\'t let the lobby leave empty</string>
+    <string name="desc_three">You can create your own room or join others\' room ! No room limit so just create and join as much as you like!</string>
+    <string name="heading_four">Easy to create</string>
+    <string name="desc_four">Just fill in all the required details and create so your room will appear at the game lobby!</string>
+    <string name="heading_five">Easy to join</string>
+    <string name="desc_five">Check the room details, and join directly or request to join for any room you like.</string>
+    <string name="heading_six">Chat now!</string>
+    <string name="desc_six">Once you have joined the room, you can now chat with the other players inside the room!</string>
+    <string name="heading_seven">Simple and Easy!</string>
+    <string name="desc_seven">Simple and easy interface that bring you the best experience! </string>
+
 </resources>

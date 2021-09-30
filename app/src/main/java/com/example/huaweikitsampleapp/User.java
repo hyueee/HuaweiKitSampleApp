@@ -1,16 +1,17 @@
 package com.example.huaweikitsampleapp;
 public class User {
 
-    public String username, email, id;
+    public String username, email, id, firstTime;
 
     public User(){
 
     }
 
-    public User( String username,String email, String id){
+    public User( String username,String email, String id, String firstTime){
         this.username=username;
         this.email=email;
         this.id=id;
+        this.firstTime = firstTime;
     }
 
     public void setEmail(String email) {
@@ -35,5 +36,13 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(String firstTime) {
+        this.firstTime = firstTime;
     }
 }

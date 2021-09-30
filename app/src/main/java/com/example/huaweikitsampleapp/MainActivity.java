@@ -5,14 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.huawei.agconnect.appmessaging.AGConnectAppMessaging;
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hmf.tasks.Task;
-import com.huawei.hms.aaid.HmsInstanceId;
-import com.huawei.hms.aaid.entity.AAIDResult;
-import com.huawei.hms.ads.AdListener;
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.BannerAdSize;
 import com.huawei.hms.ads.HwAds;
@@ -68,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar progressbar_main;
 
     DatabaseReference myRef;
+    ProgressDialog dialog = new ProgressDialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,14 +110,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        rootView.addView(topBannerView);
 
         if (mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
-            startActivity(intent);
-            finish();
+            dialog.startLoadingDialog();
+
+            String id = mAuth.getCurrentUser().getUid();
+
+            myRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String firstTime = snapshot.child("firstTime").getValue().toString();
+                    if (firstTime.equals("Yes")) {
+                        dialog.dismissLoadingDialog();
+                        Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
+                        intent.putExtra("userId", id);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        dialog.dismissLoadingDialog();
+                        Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
+                        intent.putExtra("userId", id);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         findViewById(R.id.HuaweiIdAuthButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.startLoadingDialog();
                 silentSignInByHwId();
             }
         });
@@ -173,21 +194,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newUser.put("username", "(HUAWEI user) " + name);
         newUser.put("email", email);
         newUser.put("id", storeId);
+        newUser.put("firstTime", "Yes");
 
         myRef = FirebaseDatabase.getInstance().getReference("Users").child(storeId);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
-                    intent.putExtra("userId", storeId);
-                    startActivity(intent);
-                    finish();
+                    String firstTime = snapshot.child("firstTime").getValue().toString();
+                    if (firstTime.equals("Yes")) {
+                        dialog.dismissLoadingDialog();
+                        Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
+                        intent.putExtra("userId", storeId);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        dialog.dismissLoadingDialog();
+                        Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
+                        intent.putExtra("userId", storeId);
+                        startActivity(intent);
+                        finish();
+                    }
+
                 } else {
                     FirebaseDatabase.getInstance().getReference("Users").child(storeId).setValue(newUser).addOnSuccessListener(new com.google.android.gms.tasks.OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
+                            dialog.dismissLoadingDialog();
+                            Intent intent = new Intent(getApplicationContext(),OnboardingActivity.class);
                             intent.putExtra("userId", storeId);
                             startActivity(intent);
                             finish();
@@ -272,9 +306,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     if (user.isEmailVerified()) {
-                        //redirect user profile
-                        startActivity(new Intent(MainActivity.this, SecondActivity.class));
-                        finish();
+                        String id = mAuth.getCurrentUser().getUid();
+
+                        myRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
+                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String firstTime = snapshot.child("firstTime").getValue().toString();
+                                if (firstTime.equals("Yes")) {
+                                    Intent intent = new Intent(getApplicationContext(), OnboardingActivity.class);
+                                    intent.putExtra("userId", id);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(getApplicationContext(),SecondActivity.class);
+                                    intent.putExtra("userId", id);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }else{
                         user.sendEmailVerification();
                         progressbar_main.setVisibility(View.GONE);
