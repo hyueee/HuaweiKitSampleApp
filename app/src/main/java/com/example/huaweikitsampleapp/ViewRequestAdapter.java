@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +32,15 @@ public class ViewRequestAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewR
     DatabaseReference myRef;
     String userId, gameId;
     Task<Void> myTask;
+    TextView text;
+    RecyclerView recyclerView;
 
-    public ViewRequestAdapter(FirebaseRecyclerOptions<RoomModel> options, String userId, String gameId) {
+    public ViewRequestAdapter(FirebaseRecyclerOptions<RoomModel> options, String userId, String gameId, TextView text, RecyclerView recyclerView) {
         super(options);
         this.userId = userId;
         this.gameId = gameId;
+        this.text = text;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -479,6 +485,17 @@ public class ViewRequestAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewR
 
             }
         });
+    }
+
+    @Override
+    public void onDataChanged() {
+        if(getItemCount() == 0) {
+            text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

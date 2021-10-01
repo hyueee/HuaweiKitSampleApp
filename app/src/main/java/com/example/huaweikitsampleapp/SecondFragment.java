@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -32,6 +33,7 @@ public class SecondFragment extends Fragment {
     ViewChatRoomAdapter adapter;
     String gameId, userId, gameName;
     DatabaseReference myRef;
+    TextView text;
 
     public SecondFragment(String id, String userId) {
         this.gameId = id;
@@ -66,6 +68,7 @@ public class SecondFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        text = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.SecondRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -74,7 +77,7 @@ public class SecondFragment extends Fragment {
                         .setQuery( FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId).orderByChild("createDate"), RoomModel.class)
                         .build();
 
-        adapter = new ViewChatRoomAdapter(options, gameId, userId);
+        adapter = new ViewChatRoomAdapter(options, gameId, userId, text, recyclerView);
         recyclerView.setAdapter(adapter);
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("chatRoom").child(gameId);

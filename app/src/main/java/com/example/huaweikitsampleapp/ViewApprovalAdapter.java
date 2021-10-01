@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +35,15 @@ public class ViewApprovalAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     String userId, gameId;
     DatabaseReference myRef;
     Task<Void> myTask;
+    TextView text;
+    RecyclerView recyclerView;
 
-    public ViewApprovalAdapter(FirebaseRecyclerOptions<RoomModel> options, String userId, String gameId) {
+    public ViewApprovalAdapter(FirebaseRecyclerOptions<RoomModel> options, String userId, String gameId, TextView text, RecyclerView recyclerView) {
         super(options);
         this.userId = userId;
         this.gameId = gameId;
+        this.text = text;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -221,6 +228,17 @@ public class ViewApprovalAdapter extends FirebaseRecyclerAdapter<RoomModel, View
             }
         });
 
+    }
+
+    @Override
+    public void onDataChanged() {
+        if(getItemCount() == 0) {
+            text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

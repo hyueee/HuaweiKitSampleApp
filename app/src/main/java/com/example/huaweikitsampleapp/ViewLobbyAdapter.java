@@ -15,11 +15,15 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 public class ViewLobbyAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewLobbyAdapter.myViewHolder> {
     String gameId, userId;
+    TextView text;
+    RecyclerView recyclerView;
 
-    public ViewLobbyAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId) {
+    public ViewLobbyAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId, TextView text, RecyclerView recyclerView) {
         super(options);
         this.gameId = gameId;
         this.userId = userId;
+        this.text = text;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -39,6 +43,17 @@ public class ViewLobbyAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewLob
                 v.getContext().startActivity(myIntent);
             }
         });
+    }
+
+    @Override
+    public void onDataChanged() {
+        if(getItemCount() == 0) {
+            text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

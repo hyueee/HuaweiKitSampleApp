@@ -4,6 +4,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class JoinRoomApprovalActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ViewApprovalAdapter adapter;
+    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +31,16 @@ public class JoinRoomApprovalActivity extends AppCompatActivity {
         String userId = getIntent().getStringExtra("userId");
         String gameId = getIntent().getStringExtra("gameId");
 
+        text = findViewById(R.id.text);
         recyclerView = findViewById(R.id.approvalRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
 
         FirebaseRecyclerOptions<RoomModel> options =
                 new FirebaseRecyclerOptions.Builder<RoomModel>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("approvalRoom").child(gameId).orderByChild("requestMillis"), RoomModel.class)
                         .build();
 
-        adapter = new ViewApprovalAdapter(options, userId, gameId);
+        adapter = new ViewApprovalAdapter(options, userId, gameId, text, recyclerView);
         recyclerView.setAdapter(adapter);
 
     }

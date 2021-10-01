@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -30,6 +31,7 @@ public class ThirdFragment extends Fragment {
     FloatingActionButton fabMain, fab1, fab2, fab3;
     boolean clickFab = true;
     Animation animation1, animation2, animation3, animation4;
+    TextView text;
 
     public ThirdFragment(String id, String userId) {
         this.gameId = id;
@@ -114,6 +116,7 @@ public class ThirdFragment extends Fragment {
             }
         });
 
+        text = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.ThirdRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -122,7 +125,7 @@ public class ThirdFragment extends Fragment {
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("room").child(gameId).orderByChild("createDate"), RoomModel.class)
                         .build();
 
-        adapter = new ViewOwnRoomsAdapter(options, gameId, userId);
+        adapter = new ViewOwnRoomsAdapter(options, gameId, userId, text, recyclerView);
         recyclerView.setAdapter(adapter);
 
         return view;

@@ -15,11 +15,16 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 public class ViewChatRoomAdapter extends FirebaseRecyclerAdapter<RoomModel, ViewChatRoomAdapter.myViewHolder> {
     String gameId, userId;
+    TextView text;
+    RecyclerView recyclerView;
 
-    public ViewChatRoomAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId) {
+    public ViewChatRoomAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId, TextView text, RecyclerView recyclerView) {
         super(options);
         this.gameId = gameId;
         this.userId = userId;
+        this.recyclerView = recyclerView;
+        this.text = text;
+
     }
 
     @Override
@@ -40,6 +45,17 @@ public class ViewChatRoomAdapter extends FirebaseRecyclerAdapter<RoomModel, View
                 v.getContext().startActivity(myIntent);
             }
         });
+    }
+
+    @Override
+    public void onDataChanged() {
+        if(getItemCount() == 0) {
+            text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

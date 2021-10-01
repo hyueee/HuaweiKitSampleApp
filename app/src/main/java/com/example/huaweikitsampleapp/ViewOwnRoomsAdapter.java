@@ -32,11 +32,15 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
     Task<Void> myTask;
     DatabaseReference myRef;
     int childNum;
+    RecyclerView recyclerView;
+    TextView text;
 
-    public ViewOwnRoomsAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId) {
+    public ViewOwnRoomsAdapter(@NonNull FirebaseRecyclerOptions<RoomModel> options, String gameId, String userId, TextView text, RecyclerView recyclerView) {
         super(options);
         this.gameId = gameId;
         this.userId = userId;
+        this.text = text;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -228,6 +232,17 @@ public class ViewOwnRoomsAdapter extends FirebaseRecyclerAdapter<RoomModel, View
                 v.getContext().startActivity(myIntent);
             }
         });
+    }
+
+    @Override
+    public void onDataChanged() {
+        if (getItemCount() == 0) {
+            text.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            text.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull

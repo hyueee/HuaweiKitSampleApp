@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -32,6 +33,7 @@ public class FirstFragment extends Fragment {
     ViewLobbyAdapter adapter;
     String gameId, userId, gameName;
     DatabaseReference myRef;
+    TextView text;
 
     public FirstFragment(String id, String userId) {
         this.gameId = id;
@@ -97,15 +99,34 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        text = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.FirstRecycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        myRef = FirebaseDatabase.getInstance().getReference().child("room").child(gameId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    text.setVisibility(View.VISIBLE);
+                    text.setText("Don't let it be empty. Let's create your own room now!");
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        text.setVisibility(View.GONE);
         FirebaseRecyclerOptions<RoomModel> options =
                 new FirebaseRecyclerOptions.Builder<RoomModel>()
                         .setQuery( FirebaseDatabase.getInstance().getReference().child("room").child(gameId).orderByChild("createDate"), RoomModel.class)
                         .build();
 
-        adapter = new ViewLobbyAdapter(options, gameId, userId);
+        adapter = new ViewLobbyAdapter(options, gameId, userId, text, recyclerView);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -159,7 +180,7 @@ public class FirstFragment extends Fragment {
                         .setQuery( FirebaseDatabase.getInstance().getReference().child("room").child(gameId).orderByChild("id").startAt(str).endAt(str + "\uf8ff"), RoomModel.class)
                         .build();
 
-        adapter = new ViewLobbyAdapter(options, gameId, userId);
+        adapter = new ViewLobbyAdapter(options, gameId, userId, text, recyclerView);
         adapter.startListening();
         recyclerView.setAdapter(adapter);
 
