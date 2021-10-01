@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     if (user.isEmailVerified()) {
-                        String id = mAuth.getCurrentUser().getUid();
+                        String id = user.getUid();
 
                         myRef = FirebaseDatabase.getInstance().getReference("Users").child(id);
                         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -338,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 } else{
+                    progressbar_main.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this,"Failed to Login! Please check your credentials",Toast.LENGTH_LONG).show();
                 }
             }
